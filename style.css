@@ -1,0 +1,16 @@
+body {
+	z-index: 0;
+	position: relative;
+}
+a {
+	display: block;
+	float: left;
+	margin:5px;
+}
+
+div {
+	width: 500px;
+	height: 500px;
+	position: relative;
+	z-index: 20;
+}
