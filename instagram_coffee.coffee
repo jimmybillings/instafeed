@@ -10,30 +10,29 @@ class Instafeed
 			@options[option] = value for option, value of params
 
 	_urlBuilder: ->
-
-		baseUrl = "https://api.instagram.com/v1/users/"
+		baseUrl = "https://api.instagram.com/"
 		user = "v1/users/#{@options.user_id}"
 		media = "/media/recent/"
 		accessToken = "?access_token=#{@options.access_token}"
 		count = "&count=100"
-		callback = "&callback=feed._Feedy"
+		callback = "&callback=feed._feed"
 		
 		@script = "#{baseUrl}#{user}#{media}#{accessToken}#{count}#{callback}";
 		return;
 
 	_buildScript: ->
-
 		instaScript = document.createElement('script');
 		instaScript.src = @script;
 		document.getElementsByTagName('head')[0].appendChild(instaScript);
 		return;
 
-	_run: ->
+	_feed: (results) ->
+		image for image in results.data
 
+	_run: ->
 		@_urlBuilder();
 		@_buildScript();
 		return;
-
 
 feed = new Instafeed({
 	user_id: "45200455",
@@ -41,4 +40,5 @@ feed = new Instafeed({
 });
 
 feed._run();
+
 

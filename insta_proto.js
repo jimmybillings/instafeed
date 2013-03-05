@@ -28,6 +28,7 @@ Instagram_feed = (function() {
     return feed_url = "https://api.instagram.com/v1/users/"+this.options.user_id+"/media/recent/?access_token="+this.options.access_token+"&count=100&callback=feed._Feedy";
   };
 
+
   Instagram_feed.prototype._buildScript = function (url){
 	// Create script tag
 	var scriptTag = document.createElement('script');

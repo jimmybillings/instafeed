@@ -20,12 +20,12 @@
 
     Instafeed.prototype._urlBuilder = function() {
       var accessToken, baseUrl, callback, count, media, user;
-      baseUrl = "https://api.instagram.com/v1/users/";
+      baseUrl = "https://api.instagram.com/";
       user = "v1/users/" + this.options.user_id;
       media = "/media/recent/";
       accessToken = "?access_token=" + this.options.access_token;
       count = "&count=100";
-      callback = "&callback=feed._Feedy";
+      callback = "&callback=feed._feed";
       this.script = "" + baseUrl + user + media + accessToken + count + callback;
     };
 
@@ -34,6 +34,17 @@
       instaScript = document.createElement('script');
       instaScript.src = this.script;
       document.getElementsByTagName('head')[0].appendChild(instaScript);
+    };
+
+    Instafeed.prototype._feed = function(results) {
+      var image, _i, _len, _ref, _results;
+      _ref = results.data;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        image = _ref[_i];
+        _results.push(image);
+      }
+      return _results;
     };
 
     Instafeed.prototype._run = function() {
