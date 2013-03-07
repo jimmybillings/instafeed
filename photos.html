@@ -10,10 +10,23 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="style.css">
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="instagram_coffee.js"></script>
   
 </head>
+<script>
+	feed = new Instafeed({
+    user_id: "45200455",
+    access_token: "45200455.7ff53ac.2deb72ff63a64b8ab7f75afb501868d8"
+  });
+  feed._run();
+
+  document.onclick = function(evt){
+    evt =  evt  ||  window.event;
+    var element = evt.target  ||  evt.srcElement;
+    return false;
+	};
+
+</script>
 <body>
 </body>
 </html>

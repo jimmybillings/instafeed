@@ -1,11 +1,10 @@
 class Instafeed
 	constructor: (params) ->
-		# default options
+		
 		@options =
 			user_id: "USER_ID"
 			access_token : "ACCESS_TOKEN"
 
-		# if an object is passed in, override the default options
 		if typeof params is "object"
 			@options[option] = value for option, value of params
 
@@ -14,7 +13,7 @@ class Instafeed
 		user = "v1/users/#{@options.user_id}"
 		media = "/media/recent/"
 		accessToken = "?access_token=#{@options.access_token}"
-		count = "&count=100"
+		count = "&count=50"
 		callback = "&callback=feed._feed"
 		
 		@script = "#{baseUrl}#{user}#{media}#{accessToken}#{count}#{callback}";
@@ -26,19 +25,50 @@ class Instafeed
 		document.getElementsByTagName('head')[0].appendChild(instaScript);
 		return;
 
-	_feed: (results) ->
-		image for image in results.data
+	_feed: (response) ->
+  	if typeof response isnt 'object'
+      if @options.error? and typeof @options.error is 'function'
+        @options.error.call(this, 'Invalid JSON data')
+        return false
+      else
+        throw new Error 'Invalid JSON response'
+
+    if response.meta.code isnt 200
+      if @options.error? and typeof @options.error is 'function'
+        @options.error.call(this, response.meta.error_message)
+        return false
+      else
+        throw new Error "Error from Instagram: #{response.meta.error_message}"
+
+    if response.data.length is 0
+      if @options.error? and typeof @options.error is 'function'
+        @options.error.call(this, 'No images were returned from Instagram')
+        return false
+      else
+        throw new Error 'No images were returned from Instagram'
+  	for result in response.data
+	    a = document.createElement 'a'
+	    a.href = result.images.standard_resolution.url
+
+	    img = document.createElement 'img'
+	    img.src = result.images.low_resolution.url
+
+	    a.appendChild img
+	    document.body.appendChild a
 
 	_run: ->
-		@_urlBuilder();
-		@_buildScript();
+		if typeof @options.user_id isnt 'string'
+			 throw new Error('your need to enter a user id')
+		else if typeof @options.access_token isnt 'string'
+			throw new Error('your need to enter a access token')
+		else
+			@_urlBuilder();
+			@_buildScript();
 		return;
 
-feed = new Instafeed({
-	user_id: "45200455",
-	access_token : "45200455.7ff53ac.2deb72ff63a64b8ab7f75afb501868d8"
-});
+root = exports ? window
+root.Instafeed = Instafeed
 
-feed._run();
+
 
 
